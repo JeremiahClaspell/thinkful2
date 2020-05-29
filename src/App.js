@@ -15,11 +15,13 @@ class App extends React.Component {
 
   render(){
     return (
-          <div className="App">
-            <Header/>
+            <div className="App">
+              <Header/>
               <Nav/>
-            <NoteList/>
-          </div>
+              <NoteList/>
+            </div>
+
+
     );
   }
 }

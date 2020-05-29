@@ -2,48 +2,45 @@ import React from 'react';
 import ContextState from '../ContextState'; 
 import './Note.css'; 
 import { Link } from 'react-router-dom'; 
-
-function CreateNoteList(folderId){
-    return (
-        <ContextState.Consumer>
-            {({ notes, handleDeleteNote })=>{
-                return (
-
-                    notes.filter((note)=>{
-                        //if null return all, if matches id only return records that match id
-                        if(folderId.props===''){
-                            return note; 
-                         } else if(folderId.props===note.folderId){
-                            return note; 
-                        } 
-                                                
-                    })
-                    .map((note)=>{
-                        return (
-                            <li>
-                                <h6><Link to={`/note/${note.id}`}>{note.name}</Link></h6>
-                                <div>
-                                    <p>{note.modified}</p>
-                                    <button onClick={()=>handleDeleteNote(note)}>Delete</button>
-                                </div>
-                            </li>
-                        )
-                    })
+import AddNote from './AddNote/AddNote'; 
+import NoteListErrorCatch from './NoteErrorCatch'; 
+import CreateNoteList from './CreateNoteList'; 
+import PropTypes from 'prop-types'; 
 
 
-                )
-            }}
-        </ContextState.Consumer>
-    )
+ class NoteList extends React.Component{
+     
+    constructor(props){
+        super(props); 
+        this.state = {
+            displayNote: false, 
+        }; 
+    }
+
+    handleStateChange = ()=>{
+        this.state.displayNote?this.setState({displayNote: false}): this.setState({displayNote: true})
+    }
+
+    render(){
+
+        return (
+            <NoteListErrorCatch>
+                <div className="noteList">
+                    <ul>
+                        <CreateNoteList props={this.props.props===undefined?'':this.props.props}/>
+                    </ul>
+                    {this.props.props&&<button onClick={()=>{this.handleStateChange()}}>Add Note</button>}
+                    {this.state.displayNote&&<AddNote folderId={this.props.props} handleStateChange={this.handleStateChange}/>}
+                    
+                </div>
+            </NoteListErrorCatch>
+        )
+    }
 }
 
-export default function NoteList(props){
-    return (
-        <div className="noteList">
-            <ul>
-                <CreateNoteList props={props.props===undefined?'':props.props}/>
-            </ul>
-            <button>Add Note</button>
-        </div>
-    )
+NoteList.propTypes = {
+    props: PropTypes.string, 
 }
+
+
+export default NoteList

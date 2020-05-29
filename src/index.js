@@ -6,7 +6,8 @@ import { BrowserRouter, Route , Switch, Redirect} from 'react-router-dom'
 import PageNotFound from './PageNotFound'; 
 import ContextState from './ContextState'; 
 import Folder from './Folder/Folder'; 
-import Note from './Note/Note'
+import Note from './Note/Note'; 
+import AppErrorCatch from './AppErrorCatch'; 
 
 
 
@@ -20,6 +21,7 @@ class Index extends React.Component{
       handleDeleteNote: this.handleDeleteNote, 
       folders: [], 
       notes: [], 
+      //triggerStateChange: this.triggerStateChange, want to trigger this function to rerender component after post has been made
     }; 
   }
 
@@ -30,7 +32,10 @@ class Index extends React.Component{
       fetch('http://localhost:9090/folders')
       .then((response)=>response.json())
       .then((responseJson)=>{folder=responseJson})
-      .then(()=>{resolve()}); 
+      .then(()=>{resolve()})
+      .catch((e)=>{
+        alert('something went wrong')
+      }); 
     })
 
     let note=[]
@@ -38,7 +43,10 @@ class Index extends React.Component{
       fetch('http://localhost:9090/notes')
       .then((response)=>response.json())
       .then((responseJson)=>{note=responseJson})
-      .then(()=>{resolve()}); 
+      .then(()=>{resolve()})
+      .catch((e)=>{
+        alert('something went wrong')
+      }); 
     })
 
     Promise.all([Folders, Notes])
@@ -50,7 +58,8 @@ class Index extends React.Component{
       })
   }
 
-  handleFolderSelect = (folder)=>{
+ 
+    handleFolderSelect = (folder)=>{
     folder === this.state.folder? 
     this.setState({
       folder: ''
@@ -59,17 +68,18 @@ class Index extends React.Component{
       folder: folder, 
     })
   }
+  
 
 
   handleDeleteNote = (deleteNote)=>{
-
-    console.log(deleteNote.id)
 
     fetch(`http://localhost:9090/notes/${deleteNote.id}`, {
       method: 'DELETE', 
       headers: {
         'content-type': 'application/json'
       }
+    }).catch(()=>{
+      alert('something went wrong')
     }); 
 
     const newNotes = 
@@ -84,6 +94,7 @@ class Index extends React.Component{
 
   render(){
     return (
+      <AppErrorCatch>
       <ContextState.Provider value={this.state}>
           <BrowserRouter>
             <Switch>
@@ -94,6 +105,7 @@ class Index extends React.Component{
             </Switch>
           </BrowserRouter>
       </ContextState.Provider>
+      </AppErrorCatch>
     )
   }
 }

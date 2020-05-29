@@ -1,13 +1,13 @@
 .noteList {
     display: inline-block; 
-    height: 100vh; 
+    height: 80vh; 
     vertical-align: top; 
     width: 70%; 
 }
 
 .noteList > ul {
     list-style: none; 
-    height: 80vh; 
+    height: 70vh; 
     overflow: scroll; 
 
 }

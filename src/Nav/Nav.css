@@ -1,7 +1,7 @@
 .list {
     display: inline-block; 
     border-right: 2px solid black; 
-    height: 100vh; 
+    height: 80vh; 
     vertical-align: top;
     width: 29%; 
 }
