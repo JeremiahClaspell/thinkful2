@@ -9,6 +9,8 @@ import Folder from "./Folder/Folder";
 import Note from "./Note/Note";
 import AppErrorCatch from "./AppErrorCatch";
 
+console.log(process.env);
+
 class Index extends React.Component {
   constructor(props) {
     super(props);
